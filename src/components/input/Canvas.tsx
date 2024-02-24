@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from "react";
+import { TouchEventHandler, useLayoutEffect, useRef } from "react";
 
 export const Canvas = () => {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -9,6 +9,28 @@ export const Canvas = () => {
       canvas.height = window.innerHeight;
     }
   }, []);
+
+  const draw: TouchEventHandler = (e) => {
+    const ctx = ref.current?.getContext("2d");
+    if (!ctx) return;
+
+    ctx.lineWidth = 10;
+    ctx.strokeStyle = "#555";
+    ctx.lineJoin = "round";
+
+    Array.from(e.touches).forEach((touch) => {
+      const x = touch.clientX
+      const y = touch.clientY
+      console.log(x, y);
+
+      ctx.beginPath();
+      ctx.moveTo(x - 1, y - 1)
+      ctx.lineTo(x, y);
+      ctx.closePath();
+      ctx.stroke();
+    })
+  }
+
   return (
     <canvas
       ref={ref}
@@ -19,26 +41,8 @@ export const Canvas = () => {
         top: 0,
         left: 0,
       }}
-      onTouchMove={(e) => {
-        const ctx = ref.current?.getContext("2d");
-        if (!ctx) return;
-
-        ctx.lineWidth = 4;
-        ctx.strokeStyle = "#555";
-        ctx.lineJoin = "round";
-
-        Array.from(e.touches).forEach((touch) => {
-          const x = touch.clientX
-          const y = touch.clientY
-          console.log(x, y);
-
-          ctx.beginPath();
-          ctx.moveTo(x - 1, y - 1)
-          ctx.lineTo(x, y);
-          ctx.closePath();
-          ctx.stroke();
-        })
-      }}
+      onTouchStart={draw}
+      onTouchMove={draw}
     />
   )
 };
