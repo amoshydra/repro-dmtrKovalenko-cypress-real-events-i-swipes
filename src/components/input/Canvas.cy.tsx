@@ -2,23 +2,53 @@
 
 import {Canvas} from './Canvas';
 
-const WindowWidth = 1000;
+const WindowWidth = 500;
 
 beforeEach(() => {
-  cy.viewport(WindowWidth, 1000);
+  cy.viewport(500, 500);
 })
 
-describe('Input', () => {
-  it('when Input is clicked, should call onClick', () => {
+describe('Canvas', () => {
+  it('should draw on the top left when x: 0 is provided', () => {
     cy.mount(<Canvas />);
-    
+
     cy
       .get("body")
       .realSwipe("toRight", {
         length: 200,
-        step: 20,
-        x: 100,
-        y: 20,
+        step: 5,
+        x: 0,
+        y: 1,
+        touchMoveDelay: 100,
+      })
+    ;
+  });
+
+  it('should draw on the top left when y: 0 is provided', () => {
+    cy.mount(<Canvas />);
+
+    cy
+      .get("body")
+      .realSwipe("toRight", {
+        length: 200,
+        step: 5,
+        x: 1,
+        y: 0,
+        touchMoveDelay: 100,
+      })
+    ;
+  });
+
+  it('should draw on the top left when x: 1 is provided', () => {
+    cy.mount(<Canvas />);
+
+    cy
+      .get("body")
+      .realSwipe("toRight", {
+        length: 200,
+        step: 5,
+        x: 1,
+        y: 1,
         touchMoveDelay: 100,
       })
     ;
