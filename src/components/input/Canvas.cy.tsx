@@ -2,55 +2,38 @@
 
 import {Canvas} from './Canvas';
 
-const WindowWidth = 500;
+const WindowWidth = 1000;
+const TravelLength = WindowWidth - 40;
 
 beforeEach(() => {
-  cy.viewport(500, 500);
+  cy.viewport(WindowWidth, 800);
 })
 
 describe('Canvas', () => {
-  it('should draw on the top left when x: 0 is provided', () => {
-    cy.mount(<Canvas />);
-
-    cy
-      .get("body")
-      .realSwipe("toRight", {
-        length: 200,
-        step: 5,
-        x: 0,
-        y: 1,
-        touchMoveDelay: 100,
-      })
-    ;
-  });
-
-  it('should draw on the top left when y: 0 is provided', () => {
-    cy.mount(<Canvas />);
-
-    cy
-      .get("body")
-      .realSwipe("toRight", {
-        length: 200,
-        step: 5,
-        x: 1,
-        y: 0,
-        touchMoveDelay: 100,
-      })
-    ;
-  });
-
-  it('should draw on the top left when x: 1 is provided', () => {
-    cy.mount(<Canvas />);
-
-    cy
-      .get("body")
-      .realSwipe("toRight", {
-        length: 200,
-        step: 5,
-        x: 1,
-        y: 1,
-        touchMoveDelay: 100,
-      })
-    ;
-  });
+  [
+    TravelLength,
+    TravelLength / 2,
+    TravelLength / 4,
+    TravelLength / 8,
+    TravelLength / 16,
+    TravelLength / 32,
+    TravelLength / 64,
+    TravelLength / 128,
+    TravelLength / 256,
+  ].forEach(step => {
+    it(`should draw ${step}`, () => {
+      cy.mount(<Canvas />);
+  
+      cy
+        .get("body")
+        .realSwipe("toRight", {
+          length: TravelLength,
+          step: step,
+          x: 20,
+          y: 20,
+          touchMoveDelay: 200,
+        })
+      ;
+    });
+  })
 });
